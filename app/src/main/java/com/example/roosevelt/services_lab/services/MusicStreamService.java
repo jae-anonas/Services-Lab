@@ -29,7 +29,6 @@ public class MusicStreamService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mediaPlayer = null;
         String url = MUSIC_URL; // your URL here
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -76,19 +75,22 @@ public class MusicStreamService extends Service {
         Log.i(TAG, "Service Destroyed");
         mediaPlayer.stop();
         mediaPlayer.release();
+        mediaPlayer = null;
         Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
     }
 
     public static void playMediaPlayer(){
         if (mediaPlayer != null){
+
             mediaPlayer.start();
         }
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                mediaPlayer.start();
-            }
-        });
+
+//        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mediaPlayer) {
+//                mediaPlayer.start();
+//            }
+//        });
     }
 
     public static void pauseMediaPlayer(){
@@ -100,7 +102,8 @@ public class MusicStreamService extends Service {
     public static void stopMediaPlayer(){
         if (mediaPlayer != null){
 //            mediaPlayer.stop();
-            mediaPlayer.reset();
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(0);
         }
     }
 }
